@@ -1,0 +1,150 @@
+name: Geo-Aware Fabric Network
+version: "2.0.0"
+
+caliper:
+  blockchain: fabric
+
+channels:
+  - channelName: geochannel
+    contracts:
+    - id: geo-asset
+      version: v1.0
+      language: golang
+      path: ../chaincode/geo-asset-chaincode.go
+
+organizations:
+- mspid: Org1MSP
+  identities:
+    certificates:
+    - name: 'User1'
+      clientPrivateKey:
+        pem: |
+          -----BEGIN PRIVATE KEY-----
+          MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgKuDtEQoIZYkl5zYr
+          QDdZehpTmZm/T+8dPnKKIhHB3T6hRANCAATKZJHO9BbPHk8e7jT6Q8vJ8L7Z5d8m
+          XKbQpKxCjSQAqLW4/wQYjBzLe+vB9r8HqmBnO8K7YgJzQ1Z+YcFvQ7Zh
+          -----END PRIVATE KEY-----
+      clientSignedCert:
+        pem: |
+          -----BEGIN CERTIFICATE-----
+          MIICpzCCAk2gAwIBAgIUSJQWjcSl/sEJ+HDZ6YKNSINnVz0wCgYIKoZIzj0EAwIw
+          cDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNh
+          biBGcmFuY2lzY28xGTAXBgNVBAoTEG9yZzEuZXhhbXBsZS5jb20xGTAXBgNVBAMT
+          EGNhLm9yZzEuZXhhbXBsZS5jb20wHhcNMjUwNzExMDgwMDAwWhcNMjYwNzExMDgw
+          MDAwWjBdMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UE
+          BxMNU2FuIEZyYW5jaXNjbzEhMB8GA1UEAwwYVXNlcjFAb3JnMS5leGFtcGxlLmNv
+          bTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABMpkkc70Fs8eTx7uNPpDy8nwvtnl
+          3yZcptCkrEKNJACotbj/BBiMHMt768H2vweqYGc7wrtiAnNDVn5hwW9DtmGjgfUw
+          gfIwDgYDVR0PAQH/BAQDAgeAMAwGA1UdEwEB/wQCMAAwHQYDVR0OBBYEFKZy0sTe
+          zO5/KaYxMCzqQKa6qHStMCsGA1UdIwQkMCKAIKZy0sTezO5/KaYxMCzqQKa6qHSt
+          ohCkGjAYMBYGA1UEAwwPY2Eub3JnMS5leGFtcGxlLmNvbTCBiwYIKwYBBQUHAQEE
+          fzB9MCQGCCsGAQUFBzABhhhodHRwOi8vY2Eub3JnMS5leGFtcGxlLmNvbTpOMA8G
+          A1UdEQQIMAaHBH8AAAEwCgYIKoZIzj0EAwIDSAAwRQIhAJ8gAJ3F6A8vIzJUU0gK
+          UHZB6H8vCH8wQOQXaA8lQ8eDuJ4lAiAYa8aE8DHwXQPbPH4K8oCZZQqhYjqzW1YG
+          W5XzQqv1VbpwNmNvbQ==
+          -----END CERTIFICATE-----
+
+- mspid: Org2MSP
+  identities:
+    certificates:
+    - name: 'User1'
+      clientPrivateKey:
+        pem: |
+          -----BEGIN PRIVATE KEY-----
+          MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgKuDtEQoIZYkl5zYr
+          QDdZehpTmZm/T+8dPnKKIhHB3T6hRANCAATKZJHO9BbPHk8e7jT6Q8vJ8L7Z5d8m
+          XKbQpKxCjSQAqLW4/wQYjBzLe+vB9r8HqmBnO8K7YgJzQ1Z+YcFvQ7Zh
+          -----END PRIVATE KEY-----
+      clientSignedCert:
+        pem: |
+          -----BEGIN CERTIFICATE-----
+          MIICpzCCAk2gAwIBAgIUSJQWjcSl/sEJ+HDZ6YKNSINnVz0wCgYIKoZIzj0EAwIw
+          cDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNh
+          biBGcmFuY2lzY28xGTAXBgNVBAoTEG9yZzEuZXhhbXBsZS5jb20xGTAXBgNVBAMT
+          EGNhLm9yZzEuZXhhbXBsZS5jb20wHhcNMjUwNzExMDgwMDAwWhcNMjYwNzExMDgw
+          MDAwWjBdMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UE
+          BxMNU2FuIEZyYW5jaXNjbzEhMB8GA1UEAwwYVXNlcjFAb3JnMi5leGFtcGxlLmNv
+          bTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABMpkkc70Fs8eTx7uNPpDy8nwvtnl
+          3yZcptCkrEKNJACotbj/BBiMHMt768H2vweqYGc7wrtiAnNDVn5hwW9DtmGjgfUw
+          gfIwDgYDVR0PAQH/BAQDAgeAMAwGA1UdEwEB/wQCMAAwHQYDVR0OBBYEFKZy0sTe
+          zO5/KaYxMCzqQKa6qHStMCsGA1UdIwQkMCKAIKZy0sTezO5/KaYxMCzqQKa6qHSt
+          ohCkGjAYMBYGA1UEAwwPY2Eub3JnMi5leGFtcGxlLmNvbTCBiwYIKwYBBQUHAQEE
+          fzB9MCQGCCsGAQUFBzABhhhodHRwOi8vY2Eub3JnMi5leGFtcGxlLmNvbTpOMA8G
+          A1UdEQQIMAaHBH8AAAEwCgYIKoZIzj0EAwIDSAAwRQIhAJ8gAJ3F6A8vIzJUU0gK
+          UHZB6H8vCH8wQOQXaA8lQ8eDuJ4lAiAYa8aE8DHwXQPbPH4K8oCZZQqhYjqzW1YG
+          W5XzQqv1VbpwNmNvbQ==
+          -----END CERTIFICATE-----
+
+peers:
+  peer0.org1.example.com:
+    url: grpc://localhost:7051
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICpzCCAk2gAwIBAgIUSJQWjcSl/sEJ+HDZ6YKNSINnVz0wCgYIKoZIzj0EAwIw
+        cDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNh
+        biBGcmFuY2lzY28xGTAXBgNVBAoTEG9yZzEuZXhhbXBsZS5jb20xGTAXBgNVBAMT
+        EGNhLm9yZzEuZXhhbXBsZS5jb20wHhcNMjUwNzExMDgwMDAwWhcNMjYwNzExMDgw
+        MDAwWjBdMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UE
+        BxMNU2FuIEZyYW5jaXNjbzEhMB8GA1UEAwwYVXNlcjFAb3JnMS5leGFtcGxlLmNv
+        bTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABMpkkc70Fs8eTx7uNPpDy8nwvtnl
+        3yZcptCkrEKNJACotbj/BBiMHMt768H2vweqYGc7wrtiAnNDVn5hwW9DtmGjgfUw
+        gfIwDgYDVR0PAQH/BAQDAgeAMAwGA1UdEwEB/wQCMAAwHQYDVR0OBBYEFKZy0sTe
+        zO5/KaYxMCzqQKa6qHStMCsGA1UdIwQkMCKAIKZy0sTezO5/KaYxMCzqQKa6qHSt
+        ohCkGjAYMBYGA1UEAwwPY2Eub3JnMS5leGFtcGxlLmNvbTCBiwYIKwYBBQUHAQEE
+        fzB9MCQGCCsGAQUFBzABhhhodHRwOi8vY2Eub3JnMS5leGFtcGxlLmNvbTpOMA8G
+        A1UdEQQIMAaHBH8AAAEwCgYIKoZIzj0EAwIDSAAwRQIhAJ8gAJ3F6A8vIzJUU0gK
+        UHZB6H8vCH8wQOQXaA8lQ8eDuJ4lAiAYa8aE8DHwXQPbPH4K8oCZZQqhYjqzW1YG
+        W5XzQqv1VbpwNmNvbQ==
+        -----END CERTIFICATE-----
+    grpcOptions:
+      ssl-target-name-override: peer0.org1.example.com
+
+  peer0.org2.example.com:
+    url: grpc://localhost:9051
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICpzCCAk2gAwIBAgIUSJQWjcSl/sEJ+HDZ6YKNSINnVz0wCgYIKoZIzj0EAwIw
+        cDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNh
+        biBGcmFuY2lzY28xGTAXBgNVBAoTEG9yZzEuZXhhbXBsZS5jb20xGTAXBgNVBAMT
+        EGNhLm9yZzEuZXhhbXBsZS5jb20wHhcNMjUwNzExMDgwMDAwWhcNMjYwNzExMDgw
+        MDAwWjBdMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UE
+        BxMNU2FuIEZyYW5jaXNjbzEhMB8GA1UEAwwYVXNlcjFAb3JnMi5leGFtcGxlLmNv
+        bTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABMpkkc70Fs8eTx7uNPpDy8nwvtnl
+        3yZcptCkrEKNJACotbj/BBiMHMt768H2vweqYGc7wrtiAnNDVn5hwW9DtmGjgfUw
+        gfIwDgYDVR0PAQH/BAQDAgeAMAwGA1UdEwEB/wQCMAAwHQYDVR0OBBYEFKZy0sTe
+        zO5/KaYxMCzqQKa6qHStMCsGA1UdIwQkMCKAIKZy0sTezO5/KaYxMCzqQKa6qHSt
+        ohCkGjAYMBYGA1UEAwwPY2Eub3JnMi5leGFtcGxlLmNvbTCBiwYIKwYBBQUHAQEE
+        fzB9MCQGCCsGAQUFBzABhhhodHRwOi8vY2Eub3JnMi5leGFtcGxlLmNvbTpOMA8G
+        A1UdEQQIMAaHBH8AAAEwCgYIKoZIzj0EAwIDSAAwRQIhAJ8gAJ3F6A8vIzJUU0gK
+        UHZB6H8vCH8wQOQXaA8lQ8eDuJ4lAiAYa8aE8DHwXQPbPH4K8oCZZQqhYjqzW1YG
+        W5XzQqv1VbpwNmNvbQ==
+        -----END CERTIFICATE-----
+    grpcOptions:
+      ssl-target-name-override: peer0.org2.example.com
+
+orderers:
+  orderer1.example.com:
+    url: grpc://localhost:7050
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICpzCCAk2gAwIBAgIUSJQWjcSl/sEJ+HDZ6YKNSINnVz0wCgYIKoZIzj0EAwIw
+        cDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNh
+        biBGcmFuY2lzY28xGTAXBgNVBAoTEG9yZzEuZXhhbXBsZS5jb20xGTAXBgNVBAMT
+        EGNhLm9yZzEuZXhhbXBsZS5jb20wHhcNMjUwNzExMDgwMDAwWhcNMjYwNzExMDgw
+        MDAwWjBdMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UE
+        BxMNU2FuIEZyYW5jaXNjbzEhMB8GA1UEAwwYVXNlcjFAb3JnMS5leGFtcGxlLmNv
+        bTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABMpkkc70Fs8eTx7uNPpDy8nwvtnl
+        3yZcptCkrEKNJACotbj/BBiMHMt768H2vweqYGc7wrtiAnNDVn5hwW9DtmGjgfUw
+        gfIwDgYDVR0PAQH/BAQDAgeAMAwGA1UdEwEB/wQCMAAwHQYDVR0OBBYEFKZy0sTe
+        zO5/KaYxMCzqQKa6qHStMCsGA1UdIwQkMCKAIKZy0sTezO5/KaYxMCzqQKa6qHSt
+        ohCkGjAYMBYGA1UEAwwPY2Eub3JnMS5leGFtcGxlLmNvbTCBiwYIKwYBBQUHAQEE
+        fzB9MCQGCCsGAQUFBzABhhhodHRwOi8vY2Eub3JnMS5leGFtcGxlLmNvbTpOMA8G
+        A1UdEQQIMAaHBH8AAAEwCgYIKoZIzj0EAwIDSAAwRQIhAJ8gAJ3F6A8vIzJUU0gK
+        UHZB6H8vCH8wQOQXaA8lQ8eDuJ4lAiAYa8aE8DHwXQPbPH4K8oCZZQqhYjqzW1YG
+        W5XzQqv1VbpwNmNvbQ==
+        -----END CERTIFICATE-----
+    grpcOptions:
+      ssl-target-name-override: orderer1.example.com

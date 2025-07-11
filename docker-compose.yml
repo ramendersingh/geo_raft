@@ -1,0 +1,443 @@
+networks:
+  fabric-geo-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  orderer1-data:
+  orderer2-data:
+  orderer3-data:
+  orderer4-data:
+  orderer5-data:
+  peer0-org1-data:
+  peer0-org2-data:
+  peer0-org3-data:
+  ca-org1-data:
+  ca-org2-data:
+  ca-org3-data:
+  prometheus-data:
+  grafana-data:
+
+services:
+  # Certificate Authorities
+  ca-org1:
+    image: hyperledger/fabric-ca:latest
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-org1
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_PORT=7054
+      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:17054
+    ports:
+      - "7054:7054"
+      - "17054:17054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ca-org1-data:/etc/hyperledger/fabric-ca-server
+      - ./network/crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca-org1
+    hostname: ca.org1.example.com
+    networks:
+      - fabric-geo-network
+    labels:
+      - "geo.region=us-west"
+      - "geo.zone=us-west-1a"
+
+  ca-org2:
+    image: hyperledger/fabric-ca:latest
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-org2
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_PORT=8054
+      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:18054
+    ports:
+      - "8054:8054"
+      - "18054:18054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ca-org2-data:/etc/hyperledger/fabric-ca-server
+      - ./network/crypto-config/peerOrganizations/org2.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca-org2
+    hostname: ca.org2.example.com
+    networks:
+      - fabric-geo-network
+    labels:
+      - "geo.region=us-east"
+      - "geo.zone=us-east-1a"
+
+  ca-org3:
+    image: hyperledger/fabric-ca:latest
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-org3
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_PORT=9054
+      - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:19054
+    ports:
+      - "9054:9054"
+      - "19054:19054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ca-org3-data:/etc/hyperledger/fabric-ca-server
+      - ./network/crypto-config/peerOrganizations/org3.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca-org3
+    hostname: ca.org3.example.com
+    networks:
+      - fabric-geo-network
+    labels:
+      - "geo.region=eu-west"
+      - "geo.zone=eu-west-1a"
+
+  # Orderer Nodes with Geo-Aware Consensus
+  orderer1:
+    image: hyperledger/fabric-orderer:latest
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7050
+      - ORDERER_GENERAL_BOOTSTRAPMETHOD=none
+      - ORDERER_CHANNELPARTICIPATION_ENABLED=true
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_OPERATIONS_LISTENADDRESS=0.0.0.0:17050
+      - ORDERER_METRICS_PROVIDER=prometheus
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      # Geo-aware etcdraft configuration
+      - ORDERER_CONSENSUS_TYPE=etcdraft
+      - ORDERER_CONSENSUS_ETCDRAFT_TICKINTERVAL=500ms
+      - ORDERER_CONSENSUS_ETCDRAFT_ELECTIONTICK=10
+      - ORDERER_CONSENSUS_ETCDRAFT_HEARTBEATTICK=1
+      - ORDERER_CONSENSUS_ETCDRAFT_MAXINFLIGHT=5
+      - ORDERER_CONSENSUS_ETCDRAFT_SNAPSHOTINTERVAL=100
+      # Geo-specific settings
+      - GEO_LOCATION_LATITUDE=37.7749
+      - GEO_LOCATION_LONGITUDE=-122.4194
+      - GEO_LOCATION_REGION=us-west
+      - GEO_LOCATION_ZONE=us-west-1a
+      - GEO_LOCATION_DATACENTER=sf-dc1
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+      - ./network/channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ./network/crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/msp:/var/hyperledger/orderer/msp
+      - ./network/crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/:/var/hyperledger/orderer/tls
+      - orderer1-data:/var/hyperledger/production/orderer
+    ports:
+      - 7050:7050
+      - 17050:17050
+    container_name: orderer1
+    hostname: orderer1.example.com
+    networks:
+      - fabric-geo-network
+    labels:
+      - "geo.region=us-west"
+      - "geo.zone=us-west-1a"
+      - "geo.latitude=37.7749"
+      - "geo.longitude=-122.4194"
+
+  orderer2:
+    image: hyperledger/fabric-orderer:latest
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=8050
+      - ORDERER_GENERAL_BOOTSTRAPMETHOD=none
+      - ORDERER_CHANNELPARTICIPATION_ENABLED=true
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_OPERATIONS_LISTENADDRESS=0.0.0.0:18050
+      - ORDERER_METRICS_PROVIDER=prometheus
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      # Geo-aware etcdraft configuration
+      - ORDERER_CONSENSUS_TYPE=etcdraft
+      - ORDERER_CONSENSUS_ETCDRAFT_TICKINTERVAL=500ms
+      - ORDERER_CONSENSUS_ETCDRAFT_ELECTIONTICK=10
+      - ORDERER_CONSENSUS_ETCDRAFT_HEARTBEATTICK=1
+      - ORDERER_CONSENSUS_ETCDRAFT_MAXINFLIGHT=5
+      - ORDERER_CONSENSUS_ETCDRAFT_SNAPSHOTINTERVAL=100
+      # Geo-specific settings
+      - GEO_LOCATION_LATITUDE=40.7128
+      - GEO_LOCATION_LONGITUDE=-74.0060
+      - GEO_LOCATION_REGION=us-east
+      - GEO_LOCATION_ZONE=us-east-1a
+      - GEO_LOCATION_DATACENTER=ny-dc1
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+      - ./network/channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ./network/crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/msp:/var/hyperledger/orderer/msp
+      - ./network/crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/:/var/hyperledger/orderer/tls
+      - orderer2-data:/var/hyperledger/production/orderer
+    ports:
+      - 8050:8050
+      - 18050:18050
+    container_name: orderer2
+    hostname: orderer2.example.com
+    networks:
+      - fabric-geo-network
+    labels:
+      - "geo.region=us-east"
+      - "geo.zone=us-east-1a"
+      - "geo.latitude=40.7128"
+      - "geo.longitude=-74.0060"
+
+  orderer3:
+    image: hyperledger/fabric-orderer:latest
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=9050
+      - ORDERER_GENERAL_BOOTSTRAPMETHOD=none
+      - ORDERER_CHANNELPARTICIPATION_ENABLED=true
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_OPERATIONS_LISTENADDRESS=0.0.0.0:19050
+      - ORDERER_METRICS_PROVIDER=prometheus
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      # Geo-aware etcdraft configuration
+      - ORDERER_CONSENSUS_TYPE=etcdraft
+      - ORDERER_CONSENSUS_ETCDRAFT_TICKINTERVAL=500ms
+      - ORDERER_CONSENSUS_ETCDRAFT_ELECTIONTICK=10
+      - ORDERER_CONSENSUS_ETCDRAFT_HEARTBEATTICK=1
+      - ORDERER_CONSENSUS_ETCDRAFT_MAXINFLIGHT=5
+      - ORDERER_CONSENSUS_ETCDRAFT_SNAPSHOTINTERVAL=100
+      # Geo-specific settings
+      - GEO_LOCATION_LATITUDE=51.5074
+      - GEO_LOCATION_LONGITUDE=-0.1278
+      - GEO_LOCATION_REGION=eu-west
+      - GEO_LOCATION_ZONE=eu-west-1a
+      - GEO_LOCATION_DATACENTER=london-dc1
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+      - ./network/channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ./network/crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/msp:/var/hyperledger/orderer/msp
+      - ./network/crypto-config/ordererOrganizations/example.com/orderers/orderer3.example.com/tls/:/var/hyperledger/orderer/tls
+      - orderer3-data:/var/hyperledger/production/orderer
+    ports:
+      - 9050:9050
+      - 19050:19050
+    container_name: orderer3
+    hostname: orderer3.example.com
+    networks:
+      - fabric-geo-network
+    labels:
+      - "geo.region=eu-west"
+      - "geo.zone=eu-west-1a"
+      - "geo.latitude=51.5074"
+      - "geo.longitude=-0.1278"
+
+  # Peer nodes
+  peer0-org1:
+    image: hyperledger/fabric-peer:latest
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabric-geo-consensus_fabric-geo-network
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      - CORE_PEER_ID=peer0.org1.example.com
+      - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.org1.example.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:9443
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0org1"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./network/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
+      - ./network/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
+      - peer0-org1-data:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 7051:7051
+      - 9443:9443
+    container_name: peer0-org1
+    hostname: peer0.org1.example.com
+    networks:
+      - fabric-geo-network
+    labels:
+      - "geo.region=us-west"
+      - "geo.zone=us-west-1a"
+
+  peer0-org2:
+    image: hyperledger/fabric-peer:latest
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabric-geo-consensus_fabric-geo-network
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      - CORE_PEER_ID=peer0.org2.example.com
+      - CORE_PEER_ADDRESS=peer0.org2.example.com:9051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:9051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.org2.example.com:9052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:9052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org2.example.com:9051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.example.com:9051
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:9444
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0org2"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./network/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp:/etc/hyperledger/fabric/msp
+      - ./network/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls:/etc/hyperledger/fabric/tls
+      - peer0-org2-data:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 9051:9051
+      - 9444:9444
+    container_name: peer0-org2
+    hostname: peer0.org2.example.com
+    networks:
+      - fabric-geo-network
+    labels:
+      - "geo.region=us-east"
+      - "geo.zone=us-east-1a"
+
+  peer0-org3:
+    image: hyperledger/fabric-peer:latest
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabric-geo-consensus_fabric-geo-network
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      - CORE_PEER_ID=peer0.org3.example.com
+      - CORE_PEER_ADDRESS=peer0.org3.example.com:11051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:11051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.org3.example.com:11052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:11052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org3.example.com:11051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org3.example.com:11051
+      - CORE_PEER_LOCALMSPID=Org3MSP
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:9445
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0org3"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./network/crypto-config/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/msp:/etc/hyperledger/fabric/msp
+      - ./network/crypto-config/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls:/etc/hyperledger/fabric/tls
+      - peer0-org3-data:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 11051:11051
+      - 9445:9445
+    container_name: peer0-org3
+    hostname: peer0.org3.example.com
+    networks:
+      - fabric-geo-network
+    labels:
+      - "geo.region=eu-west"
+      - "geo.zone=eu-west-1a"
+
+  # Monitoring stack
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    hostname: prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    networks:
+      - fabric-geo-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    hostname: grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - fabric-geo-network
+
+  # Geo-consensus monitoring dashboard
+  geo-dashboard:
+    build:
+      context: ./monitoring
+      dockerfile: Dockerfile
+    container_name: geo-dashboard
+    hostname: geo-dashboard
+    ports:
+      - 8080:8080
+    environment:
+      - NODE_ENV=production
+      - ORDERER_ENDPOINTS=orderer1:7050,orderer2:8050,orderer3:9050
+      - PROMETHEUS_URL=http://prometheus:9090
+    volumes:
+      - ./monitoring:/app
+    command: ["node", "dashboard.js"]
+    networks:
+      - fabric-geo-network
+    depends_on:
+      - prometheus
+      - orderer1
+      - orderer2
+      - orderer3
+
+  # Caliper benchmark runner
+  caliper-runner:
+    build:
+      context: ./benchmarks
+      dockerfile: Dockerfile
+    container_name: caliper-runner
+    hostname: caliper-runner
+    volumes:
+      - ./benchmarks:/opt/caliper
+      - ./network:/opt/caliper/network
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - CALIPER_WORKSPACE=/opt/caliper
+      - FABRIC_VERSION=2.5
+    networks:
+      - fabric-geo-network
+    profiles:
+      - benchmark

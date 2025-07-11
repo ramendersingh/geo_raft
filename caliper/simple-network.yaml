@@ -1,0 +1,33 @@
+name: Geo-Aware Fabric Network
+version: "2.0.0"
+
+caliper:
+  blockchain: fabric
+
+channels:
+  - channelName: testchannel
+    contracts:
+    - id: geo-asset
+      version: v1.0
+      language: node
+      path: ../chaincode
+
+organizations:
+- mspid: Org1MSP
+  peers:
+  - peer0.org1.example.com
+
+- mspid: Org2MSP  
+  peers:
+  - peer0.org2.example.com
+
+peers:
+  peer0.org1.example.com:
+    url: grpc://localhost:7051
+    
+  peer0.org2.example.com:
+    url: grpc://localhost:9051
+
+orderers:
+  orderer1.example.com:
+    url: grpc://localhost:7050

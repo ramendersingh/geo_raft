@@ -1,0 +1,360 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "Geo-Aware Hyperledger Fabric Network",
+    "tags": ["fabric", "blockchain", "geo-aware", "consensus"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Geographic Network Topology",
+        "type": "geomap",
+        "targets": [
+          {
+            "expr": "fabric_orderer_consensus_geo_location",
+            "legendFormat": "{{orderer}} - {{region}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "vis": false
+              }
+            }
+          }
+        },
+        "options": {
+          "view": {
+            "id": "zero",
+            "lat": 0,
+            "lon": 0,
+            "zoom": 1
+          },
+          "controls": {
+            "mouseWheelZoom": true,
+            "showZoom": true,
+            "showAttribution": true
+          },
+          "basemap": {
+            "name": "Open street map",
+            "type": "osm"
+          },
+          "layers": [
+            {
+              "type": "markers",
+              "config": {
+                "size": {
+                  "fixed": 5,
+                  "min": 2,
+                  "max": 15
+                },
+                "color": {
+                  "fixed": "dark-green"
+                },
+                "fillOpacity": 0.4,
+                "strokeWidth": 2,
+                "strokeColor": "green"
+              }
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "id": 2,
+        "title": "Regional Consensus Performance",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "avg_over_time(fabric_orderer_consensus_geo_latency_seconds[5m])",
+            "legendFormat": "{{region}} Avg Latency"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "displayMode": "list",
+              "orientation": "horizontal"
+            },
+            "mappings": [],
+            "thresholds": {
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 0.5
+                }
+              ]
+            },
+            "unit": "s"
+          }
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        }
+      },
+      {
+        "id": 3,
+        "title": "Geo-Consensus Leader Selection",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "fabric_orderer_consensus_geo_leader_changes_total",
+            "legendFormat": "Leader Changes"
+          },
+          {
+            "expr": "fabric_orderer_consensus_geo_proximity_score",
+            "legendFormat": "Proximity Score"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "vis": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "never",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "short"
+          }
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 8
+        }
+      },
+      {
+        "id": 4,
+        "title": "Cross-Region Transaction Latency",
+        "type": "heatmap",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, fabric_orderer_consensus_geo_cross_region_latency_bucket)",
+            "legendFormat": "95th Percentile"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "vis": false
+              },
+              "scaleDistribution": {
+                "type": "linear"
+              }
+            }
+          }
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 16
+        }
+      },
+      {
+        "id": 5,
+        "title": "Geographic Asset Distribution",
+        "type": "piechart",
+        "targets": [
+          {
+            "expr": "fabric_chaincode_geo_assets_by_region",
+            "legendFormat": "{{region}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "vis": false
+              }
+            },
+            "mappings": []
+          }
+        },
+        "options": {
+          "reduceOptions": {
+            "values": false,
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": ""
+          },
+          "pieType": "pie",
+          "tooltip": {
+            "mode": "single"
+          },
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom"
+          }
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 16
+        }
+      },
+      {
+        "id": 6,
+        "title": "Network Performance Metrics",
+        "type": "table",
+        "targets": [
+          {
+            "expr": "fabric_orderer_consensus_geo_performance_metrics",
+            "format": "table",
+            "instant": true
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "displayMode": "auto"
+            },
+            "mappings": [],
+            "thresholds": {
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          }
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 24,
+          "x": 0,
+          "y": 24
+        }
+      }
+    ],
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "refresh": "5s",
+    "schemaVersion": 27,
+    "style": "dark",
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": "prometheus",
+          "definition": "label_values(fabric_orderer_consensus_geo_latency_seconds, region)",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Region",
+          "multi": true,
+          "name": "region",
+          "options": [],
+          "query": {
+            "query": "label_values(fabric_orderer_consensus_geo_latency_seconds, region)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "uid": "geo-fabric-001",
+    "version": 1,
+    "weekStart": ""
+  }
+}

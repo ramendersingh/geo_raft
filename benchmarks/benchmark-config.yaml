@@ -1,0 +1,160 @@
+test:
+  name: Geo-Aware Consensus Performance Test
+  description: Comprehensive performance testing of geo-aware etcdraft consensus
+  workers:
+    type: local
+    number: 10
+  rounds:
+  - label: Initialize Ledger
+    description: Initialize the ledger with geo-tagged assets
+    txNumber: 100
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 50
+    workload:
+      module: workloads/init-ledger.js
+      arguments:
+        contractId: geo-asset
+
+  - label: Create Assets - US West
+    description: Create assets in US West region
+    txNumber: 500
+    rateControl:
+      type: linear-rate
+      opts:
+        startingTps: 10
+        finishingTps: 100
+    workload:
+      module: workloads/create-asset.js
+      arguments:
+        contractId: geo-asset
+        region: us-west
+        zone: us-west-1a
+        assetPrefix: usw
+
+  - label: Create Assets - US East
+    description: Create assets in US East region
+    txNumber: 500
+    rateControl:
+      type: linear-rate
+      opts:
+        startingTps: 10
+        finishingTps: 100
+    workload:
+      module: workloads/create-asset.js
+      arguments:
+        contractId: geo-asset
+        region: us-east
+        zone: us-east-1a
+        assetPrefix: use
+
+  - label: Create Assets - EU West
+    description: Create assets in EU West region
+    txNumber: 500
+    rateControl:
+      type: linear-rate
+      opts:
+        startingTps: 10
+        finishingTps: 100
+    workload:
+      module: workloads/create-asset.js
+      arguments:
+        contractId: geo-asset
+        region: eu-west
+        zone: eu-west-1a
+        assetPrefix: euw
+
+  - label: Cross-Region Transfers
+    description: Test cross-region asset transfers
+    txNumber: 1000
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 80
+    workload:
+      module: workloads/transfer-asset.js
+      arguments:
+        contractId: geo-asset
+        crossRegion: true
+
+  - label: Same-Region Transfers
+    description: Test same-region asset transfers
+    txNumber: 1000
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 120
+    workload:
+      module: workloads/transfer-asset.js
+      arguments:
+        contractId: geo-asset
+        crossRegion: false
+
+  - label: Query Performance - Regional
+    description: Test regional query performance
+    txNumber: 2000
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 200
+    workload:
+      module: workloads/query-assets.js
+      arguments:
+        contractId: geo-asset
+        queryType: regional
+
+  - label: Query Performance - Proximity
+    description: Test proximity-based query performance
+    txNumber: 1000
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 150
+    workload:
+      module: workloads/query-assets.js
+      arguments:
+        contractId: geo-asset
+        queryType: proximity
+
+  - label: Mixed Workload
+    description: Mixed workload with creates, transfers, and queries
+    txNumber: 2000
+    rateControl:
+      type: maximum-rate
+      opts:
+        tps: 200
+    workload:
+      module: workloads/mixed-workload.js
+      arguments:
+        contractId: geo-asset
+
+monitors:
+  resource:
+  - module: docker
+    options:
+      interval: 5
+      containers:
+      - orderer1
+      - orderer2
+      - orderer3
+      - peer0-org1
+      - peer0-org2
+      - peer0-org3
+
+  - module: prometheus
+    options:
+      url: "http://prometheus:9090"
+      metrics:
+        include: [
+          "hyperledger_fabric_orderer_consensus_etcdraft_leader_changes_total",
+          "hyperledger_fabric_orderer_consensus_etcdraft_proposal_failures_total",
+          "hyperledger_fabric_orderer_consensus_etcdraft_data_persist_duration",
+          "hyperledger_fabric_orderer_consensus_etcdraft_normal_proposals_received",
+          "hyperledger_fabric_orderer_consensus_etcdraft_config_proposals_received"
+        ]
+      push_url: "http://prometheus:9091"
+
+observer:
+  type: prometheus
+  interval: 5

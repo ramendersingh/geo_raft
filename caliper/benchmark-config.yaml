@@ -1,0 +1,67 @@
+test:
+  name: Geo-Aware Fabric Performance Test
+  description: Benchmarking geo-aware consensus performance
+  workers:
+    number: 4
+  rounds:
+  - label: Initialize Assets
+    description: Create initial geo-located assets
+    txNumber: 100
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 10
+    workload:
+      module: workload/create-asset.js
+      arguments:
+        prefix: "asset"
+        
+  - label: Query Assets
+    description: Query assets by location
+    txNumber: 200
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 20
+    workload:
+      module: workload/query-asset.js
+      arguments:
+        prefix: "asset"
+        
+  - label: Transfer Assets
+    description: Transfer assets between regions
+    txNumber: 150
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 15
+    workload:
+      module: workload/transfer-asset.js
+      arguments:
+        prefix: "asset"
+        
+  - label: Geographic Query
+    description: Query nearby assets using geo-location
+    txNumber: 100
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 25
+    workload:
+      module: workload/geo-query.js
+      arguments:
+        latitude: 37.7749
+        longitude: -122.4194
+        radius: 1000
+
+monitors:
+  resource:
+  - module: prometheus
+    options:
+      url: "http://localhost:9090"
+      metrics:
+        include: [up, consensus_etcdraft_leader_changes, broadcast_processed_count]
+        
+  - module: docker
+    options:
+      interval: 1

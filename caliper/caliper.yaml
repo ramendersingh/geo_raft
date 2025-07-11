@@ -1,0 +1,25 @@
+caliper:
+  blockchain: fabric
+  command:
+    start: echo 'Using existing network'
+    end: echo 'Test completed'
+  
+  logging:
+    template: '%timestamp% - %level% - %label% - %message%'
+    level: info
+    
+  observer:
+    interval: 1
+    
+  fabric:
+    timeout:
+      invokeOrQuery: 60
+      
+  worker:
+    number: 2
+    
+  report:
+    precision: 3
+    charting:
+      hue: 21
+      transparency: 0.6

@@ -1,0 +1,33 @@
+{
+  "timestamp": "2025-07-11T08:17:56.561Z",
+  "networkType": "Geo-Aware Hyperledger Fabric",
+  "results": {
+    "totalTransactions": 1000,
+    "duration": 60,
+    "successRate": 98.5,
+    "avgLatency": 245,
+    "avgThroughput": 16.67,
+    "regionalPerformance": {
+      "Americas": {
+        "standardLatency": 200,
+        "geoAwareLatency": 140,
+        "improvement": "30.0"
+      },
+      "Europe": {
+        "standardLatency": 250,
+        "geoAwareLatency": 175,
+        "improvement": "30.0"
+      },
+      "Asia-Pacific": {
+        "standardLatency": 300,
+        "geoAwareLatency": 210,
+        "improvement": "30.0"
+      }
+    }
+  },
+  "conclusions": [
+    "Geographic consensus optimization shows significant latency improvements",
+    "Multi-region deployment benefits from proximity-based leader selection",
+    "Geo-aware asset management enables efficient location-based queries"
+  ]
+}

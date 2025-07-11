@@ -1,0 +1,27 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'orderer-nodes'
+    static_configs:
+      - targets: ['orderer1:17050', 'orderer2:18050', 'orderer3:19050']
+    metrics_path: /metrics
+    scrape_interval: 10s
+
+  - job_name: 'peer-nodes'
+    static_configs:
+      - targets: ['peer0-org1:9443', 'peer0-org2:9444', 'peer0-org3:9445']
+    metrics_path: /metrics
+    scrape_interval: 10s
+
+  - job_name: 'ca-nodes'
+    static_configs:
+      - targets: ['ca-org1:17054', 'ca-org2:18054', 'ca-org3:19054']
+    metrics_path: /metrics
+    scrape_interval: 15s
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    scrape_interval: 5s

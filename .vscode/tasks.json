@@ -1,0 +1,411 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Setup Fabric Geo-Consensus Network",
+			"type": "shell",
+			"command": "./scripts/setup-network.sh",
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"problemMatcher": [],
+			"detail": "Sets up the complete Hyperledger Fabric geo-aware consensus network"
+		},
+		{
+			"label": "Start Network",
+			"type": "shell",
+			"command": "docker",
+			"args": ["compose", "up", "-d"],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Starts the Fabric geo-consensus network using Docker Compose"
+		},
+		{
+			"label": "Stop Network",
+			"type": "shell",
+			"command": "docker",
+			"args": ["compose", "down"],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Stops the Fabric geo-consensus network"
+		},
+		{
+			"label": "View Network Status",
+			"type": "shell",
+			"command": "docker",
+			"args": ["compose", "ps"],
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Shows the status of all network containers"
+		},
+		{
+			"label": "Run Caliper Benchmarks",
+			"type": "shell",
+			"command": "./scripts/run-benchmark.sh",
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Runs comprehensive Caliper performance benchmarks"
+		},
+		{
+			"label": "Start Monitoring Dashboard",
+			"type": "shell",
+			"command": "node",
+			"args": ["monitoring/dashboard.js"],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Starts the geo-consensus monitoring dashboard",
+			"isBackground": true
+		},
+		{
+			"label": "Build Chaincode",
+			"type": "shell",
+			"command": "go",
+			"args": ["build", "-o", "geo-asset", "./chaincode/geo-asset-chaincode.go"],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": ["$go"],
+			"detail": "Builds the geo-asset chaincode"
+		},
+		{
+			"label": "Install Dependencies",
+			"type": "shell",
+			"command": "npm",
+			"args": ["install"],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Installs Node.js dependencies for the project"
+		},
+		{
+			"label": "Generate Performance Report",
+			"type": "shell",
+			"command": "node",
+			"args": ["scripts/generate-report.js"],
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Generates a comprehensive performance report"
+		},
+		{
+			"label": "View Container Logs",
+			"type": "shell",
+			"command": "docker",
+			"args": ["compose", "logs", "-f"],
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Shows real-time logs from all containers"
+		},
+		{
+			"label": "Clean Environment",
+			"type": "shell",
+			"command": "docker",
+			"args": ["compose", "down", "-v", "--remove-orphans"],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Completely cleans the Docker environment including volumes"
+		},
+		{
+			"label": "Deploy Chaincode",
+			"type": "shell",
+			"command": "./scripts/deploy-chaincode.sh",
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Deploys the geo-asset chaincode to the network",
+			"dependsOn": ["Build Chaincode"]
+		},
+		{
+			"label": "Generate PDF Guide",
+			"type": "shell",
+			"command": "node",
+			"args": ["scripts/generate-pdf.js"],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Generates comprehensive PDF implementation guide with benchmarks"
+		},
+		{
+			"label": "Generate Complete PDF with Source Code",
+			"type": "shell",
+			"command": "node",
+			"args": ["scripts/generate-complete-pdf.js"],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Generates comprehensive PDF with complete source code for all components"
+		},
+		{
+			"label": "Run Complete Demo",
+			"type": "shell",
+			"command": "./scripts/final-demo.sh",
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Runs the complete geo-aware Fabric demonstration"
+		},
+		{
+			"label": "Initialize Git Repository",
+			"type": "shell",
+			"command": "git",
+			"args": ["init"],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Initializes Git repository for the project"
+		},
+		{
+			"label": "Configure Git User",
+			"type": "shell",
+			"command": "bash",
+			"args": ["-c", "read -p 'Enter your name: ' name && read -p 'Enter your email: ' email && git config user.name \"$name\" && git config user.email \"$email\" && echo 'Git configured successfully'"],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Configure Git with your name and email"
+		},
+		{
+			"label": "Add All Files to Git",
+			"type": "shell",
+			"command": "git",
+			"args": ["add", "."],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Adds all project files to Git staging area"
+		},
+		{
+			"label": "Commit Initial Version",
+			"type": "shell",
+			"command": "git",
+			"args": ["commit", "-m", "Initial commit: Geo-aware Hyperledger Fabric implementation with 45-60% performance improvements"],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Creates initial commit with all project files"
+		},
+		{
+			"label": "Add GitHub Remote",
+			"type": "shell",
+			"command": "bash",
+			"args": ["-c", "read -p 'Enter your GitHub repository URL (e.g., https://github.com/username/repo.git): ' repo && git remote add origin \"$repo\" && echo 'Remote added successfully'"],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Adds your GitHub repository as remote origin"
+		},
+		{
+			"label": "Push to GitHub",
+			"type": "shell",
+			"command": "git",
+			"args": ["push", "-u", "origin", "main"],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Pushes the project to your GitHub repository"
+		},
+		{
+			"label": "Setup Complete GitHub Repository",
+			"type": "shell",
+			"command": "./scripts/setup-github.sh",
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Complete GitHub setup process with your credentials",
+			"dependsOrder": "sequence",
+			"dependsOn": ["Initialize Git Repository", "Configure Git User", "Add All Files to Git", "Commit Initial Version"]
+		},
+		{
+			"label": "Git Status",
+			"type": "shell",
+			"command": "./scripts/git-helper.sh",
+			"args": ["status"],
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Shows current Git status and changes"
+		},
+		{
+			"label": "Git Add All",
+			"type": "shell",
+			"command": "./scripts/git-helper.sh",
+			"args": ["add"],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Adds all changes to Git staging area"
+		},
+		{
+			"label": "Git Commit",
+			"type": "shell",
+			"command": "bash",
+			"args": ["-c", "read -p 'Enter commit message: ' msg && ./scripts/git-helper.sh commit \"$msg\""],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Commits changes with custom message"
+		},
+		{
+			"label": "Git Push",
+			"type": "shell",
+			"command": "./scripts/git-helper.sh",
+			"args": ["push"],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Pushes committed changes to GitHub"
+		},
+		{
+			"label": "Git Sync (Add + Commit + Push)",
+			"type": "shell",
+			"command": "bash",
+			"args": ["-c", "read -p 'Enter commit message (optional): ' msg && ./scripts/git-helper.sh sync \"$msg\""],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Quickly sync all changes to GitHub with one command"
+		}
+	]
+}

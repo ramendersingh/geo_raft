@@ -1,0 +1,112 @@
+# Git ignore file for Hyperledger Fabric Geo-Consensus project
+
+# Generated certificates and crypto material
+**/crypto-config/
+**/channel-artifacts/
+**/*_sk
+**/*.block
+**/*.tx
+
+# Docker volumes and containers
+.volumes/
+*.log
+
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+
+# Go build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+geo-asset
+vendor/
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Dependency directories
+vendor/
+
+# IDE files
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Performance reports
+caliper/reports/
+*.html
+performance-*.json
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Fabric binaries (if downloaded locally)
+bin/
+config/
+
+# Backup files
+*.bak
+*.backup
+
+# PDF reports (generated)
+# Note: Keep generated PDFs for documentation
+# *.pdf
+
+# Caliper temporary files
+.caliper/
+
+# Docker Compose override files
+docker-compose.override.yml
+
+# Prometheus data
+prometheus-data/
+
+# Grafana data
+grafana-data/

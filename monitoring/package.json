@@ -1,0 +1,11 @@
+{
+  "name": "fabric-geo-dashboard",
+  "version": "1.0.0",
+  "description": "Geo-aware consensus monitoring dashboard",
+  "main": "dashboard.js",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2",
+    "axios": "^1.4.0"
+  }
+}
