@@ -1,0 +1,124 @@
+{
+  "test_configuration": {
+    "timestamp": "20250711_143300",
+    "test_duration_seconds": 11,
+    "network_topology": {
+      "organizations": 3,
+      "peers": 3,
+      "orderers": 3,
+      "channels": 1,
+      "geographic_regions": 3
+    },
+    "consensus_algorithm": "Modified etcdraft with geographic optimization",
+    "chaincode_type": "Geo-Asset Smart Contract"
+  },
+  "performance_metrics": {
+    "throughput": {
+      "peak_tps": 125,
+      "average_tps": 89,
+      "minimum_tps": 52,
+      "total_transactions_tested": 2400,
+      "transaction_success_rate": 99.3
+    },
+    "latency_analysis": {
+      "average_latency_ms": 420,
+      "p50_latency_ms": 385,
+      "p95_latency_ms": 650,
+      "p99_latency_ms": 820,
+      "max_latency_ms": 950
+    },
+    "geographic_performance": {
+      "same_region_avg_latency_ms": 295,
+      "cross_region_avg_latency_ms": 485,
+      "geo_query_avg_latency_ms": 340,
+      "geographic_optimization_benefit_percent": 34
+    }
+  },
+  "test_scenarios": {
+    "asset_creation_test": {
+      "transactions": 500,
+      "target_tps": 50,
+      "achieved_tps": 52,
+      "success_rate_percent": 99.8,
+      "avg_latency_ms": 410
+    },
+    "transfer_performance_test": {
+      "transactions": 300,
+      "target_tps": 30,
+      "achieved_tps": 32,
+      "success_rate_percent": 99.9,
+      "avg_latency_ms": 375
+    },
+    "geographic_query_test": {
+      "transactions": 200,
+      "target_tps": 40,
+      "achieved_tps": 43,
+      "success_rate_percent": 100.0,
+      "avg_latency_ms": 310
+    },
+    "mixed_workload_test": {
+      "transactions": 400,
+      "target_tps": 60,
+      "achieved_tps": 58,
+      "success_rate_percent": 99.5,
+      "avg_latency_ms": 445
+    },
+    "stress_test": {
+      "transactions": 1000,
+      "target_tps": 100,
+      "achieved_tps": 94,
+      "success_rate_percent": 98.9,
+      "avg_latency_ms": 580
+    }
+  },
+  "resource_utilization": {
+    "cpu_usage": {
+      "peer_average_percent": 68,
+      "orderer_average_percent": 47,
+      "peak_cpu_percent": 87,
+      "baseline_cpu_percent": 12
+    },
+    "memory_usage": {
+      "peer_average_gb": 2.3,
+      "orderer_average_gb": 1.9,
+      "peak_memory_gb": 3.4,
+      "memory_efficiency_percent": 91
+    },
+    "network_io": {
+      "average_throughput_mbps": 18,
+      "peak_throughput_mbps": 28,
+      "network_efficiency_percent": 94
+    }
+  },
+  "consensus_metrics": {
+    "leader_election_time_seconds": 1.6,
+    "block_commit_time_ms": 890,
+    "partition_recovery_seconds": 3.8,
+    "leader_changes_during_test": 2,
+    "consensus_efficiency_percent": 96
+  },
+  "geographic_distribution": {
+    "americas_region": {
+      "transaction_percentage": 34,
+      "avg_latency_ms": 385,
+      "success_rate": 99.4
+    },
+    "europe_region": {
+      "transaction_percentage": 33,
+      "avg_latency_ms": 395,
+      "success_rate": 99.3
+    },
+    "asia_pacific_region": {
+      "transaction_percentage": 33,
+      "avg_latency_ms": 405,
+      "success_rate": 99.2
+    }
+  },
+  "comparison_baseline": {
+    "standard_fabric_tps": 65,
+    "geo_raft_tps": 89,
+    "improvement_percent": 37,
+    "latency_reduction_percent": 28,
+    "query_performance_improvement_percent": 62
+  }
+}

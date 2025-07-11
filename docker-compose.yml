@@ -414,7 +414,7 @@ services:
       - PROMETHEUS_URL=http://prometheus:9090
     volumes:
       - ./monitoring:/app
-    command: ["node", "dashboard.js"]
+    command: ["node", "unified-dashboard.js"]
     networks:
       - fabric-geo-network
     depends_on:

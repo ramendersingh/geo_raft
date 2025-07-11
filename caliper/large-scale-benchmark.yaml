@@ -1,0 +1,120 @@
+test:
+  name: Large-Scale Geo-Raft Performance Test
+  description: Comprehensive performance testing with high transaction loads across geographic regions
+  workers:
+    number: 20
+  rounds:
+    - label: warmup
+      description: Network warmup phase
+      txNumber: 1000
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 50
+      workload:
+        module: workload/create-asset.js
+        arguments:
+          assets: 1000
+          
+    - label: create-assets-low-load
+      description: Asset creation with moderate load
+      txNumber: 5000
+      rateControl:
+        type: linear-rate
+        opts:
+          startingTps: 100
+          finishingTps: 300
+      workload:
+        module: workload/create-asset.js
+        arguments:
+          assets: 5000
+          
+    - label: create-assets-high-load
+      description: Asset creation with high load testing
+      txNumber: 10000
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 500
+      workload:
+        module: workload/create-asset.js
+        arguments:
+          assets: 10000
+          
+    - label: query-assets-burst
+      description: Burst query testing across regions
+      txNumber: 15000
+      rateControl:
+        type: maximum-rate
+        opts:
+          tps: 1000
+      workload:
+        module: workload/query-asset.js
+        arguments:
+          assets: 10000
+          
+    - label: transfer-assets-sustained
+      description: Sustained transfer operations
+      txNumber: 8000
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 400
+      workload:
+        module: workload/transfer-asset.js
+        arguments:
+          assets: 8000
+          
+    - label: geo-queries-intensive
+      description: Intensive geographic proximity queries
+      txNumber: 12000
+      rateControl:
+        type: linear-rate
+        opts:
+          startingTps: 200
+          finishingTps: 800
+      workload:
+        module: workload/geo-query.js
+        arguments:
+          radius: 100
+          regions: 3
+          
+    - label: mixed-workload-peak
+      description: Mixed workload peak performance test
+      txNumber: 20000
+      rateControl:
+        type: composite-rate
+        opts:
+          weights:
+            - 40  # create-asset
+            - 35  # query-asset
+            - 15  # transfer-asset
+            - 10  # geo-query
+          tps: 600
+      workload:
+        module: workload/mixed-workload.js
+        arguments:
+          totalAssets: 50000
+          
+monitors:
+  prometheus:
+    - module: prometheus-push
+      options:
+        url: "http://prometheus:9090"
+        interval: 1
+        
+  resource:
+    - module: docker
+      options:
+        interval: 2
+        containers: 
+          - "orderer0.example.com"
+          - "orderer1.example.com" 
+          - "orderer2.example.com"
+          - "peer0.org1.example.com"
+          - "peer0.org2.example.com"
+          - "peer0.org3.example.com"
+          
+observer:
+  type: prometheus
+  interval: 1

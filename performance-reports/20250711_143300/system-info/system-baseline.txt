@@ -1,0 +1,34 @@
+Geo-Raft Performance Test - System Baseline
+==========================================
+
+Test Date: Fri Jul 11 14:33:01 UTC 2025
+Hostname: ram1
+OS: Ubuntu 22.04.5 LTS
+Kernel: 6.8.0-1032-gcp
+Architecture: x86_64
+
+CPU Information:
+CPU(s):                               8
+On-line CPU(s) list:                  0-7
+Model name:                           Intel(R) Xeon(R) CPU @ 2.20GHz
+Thread(s) per core:                   2
+Core(s) per socket:                   4
+Socket(s):                            1
+NUMA node0 CPU(s):                    0-7
+
+Memory Information:
+               total        used        free      shared  buff/cache   available
+Mem:            31Gi       3.7Gi        23Gi       146Mi       3.6Gi        27Gi
+Swap:             0B          0B          0B
+
+Disk Usage:
+/dev/root        97G   13G   85G  13% /
+
+Docker Version: Docker version 28.3.2, build 578ccf6
+Node.js Version: v24.4.0
+NPM Version: 11.4.2
+
+Network Configuration:
+default via 10.190.0.1 dev ens4 proto dhcp src 10.190.0.9 metric 100 
+10.190.0.1 dev ens4 proto dhcp scope link src 10.190.0.9 metric 100 
+169.254.169.254 via 10.190.0.1 dev ens4 proto dhcp src 10.190.0.9 metric 100 

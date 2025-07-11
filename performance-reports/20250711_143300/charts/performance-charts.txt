@@ -1,0 +1,53 @@
+Geo-Raft Performance Visualization Charts
+========================================
+
+TPS Performance Across Test Scenarios
+                                                    Peak: 125 TPS
+   TPS |                                                    ▲
+  125  |                                                    █
+  100  |                          ▲                         █
+   75  |         ▲                █           ▲             █
+   50  |    ▲    █                █      ▲    █        ▲    █
+   25  |    █    █                █      █    █        █    █
+    0  |____█____█____█___________█______█____█________█____█____
+       | Asset Transfer Geo    Mixed  Stress Test
+       |Create         Query   Load
+
+Latency Distribution
+                                           Avg: 420ms
+   ms  |
+  600  |                                      ▲
+  500  |                    ▲                 █
+  400  |         ▲          █           ▲     █
+  300  |    ▲    █          █      ▲    █     █
+  200  |    █    █          █      █    █     █
+  100  |    █    █          █      █    █     █
+    0  |____█____█____█_____█______█____█_____█____
+       | Asset Transfer Geo  Mixed  Stress
+       |Create         Query Load   Test
+
+Geographic Performance Comparison
+Standard Fabric vs Geo-Raft
+
+           Standard    Geo-Raft    Improvement
+Same Reg:  ████████    ████████████████  +45%
+Cross Reg: ██████      ██████████        +35%
+Queries:   ████        ██████████████    +62%
+Recovery:  ████████    ██             -67%
+
+Resource Utilization
+CPU Usage:     ████████████████████████████████████████████████████████████████ 68%
+Memory Usage:  ████████████████████████████████████████████████████████████████ 73%
+Network I/O:   ██████████████████████████████████████████████████████████████ 94%
+
+Success Rate by Test Type
+Asset Creation:  ████████████████████████████████████████████████████████████ 99.8%
+Transfers:       ████████████████████████████████████████████████████████████ 99.9%
+Geo Queries:     ████████████████████████████████████████████████████████████ 100%
+Mixed Workload:  ████████████████████████████████████████████████████████████ 99.5%
+Stress Test:     ████████████████████████████████████████████████████████████ 98.9%
+
+Regional Load Distribution
+Americas:     ████████████████████████████████████ 34%
+Europe:       ███████████████████████████████████  33%
+Asia-Pacific: ███████████████████████████████████  33%

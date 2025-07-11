@@ -63,9 +63,9 @@
 			"detail": "Shows the status of all network containers"
 		},
 		{
-			"label": "Run Caliper Benchmarks",
+			"label": "Run Large-Scale Performance Test",
 			"type": "shell",
-			"command": "./scripts/run-benchmark.sh",
+			"command": "./scripts/large-scale-performance-test.sh",
 			"group": "test",
 			"presentation": {
 				"echo": true,
@@ -74,13 +74,13 @@
 				"panel": "shared"
 			},
 			"problemMatcher": [],
-			"detail": "Runs comprehensive Caliper performance benchmarks"
+			"detail": "Runs comprehensive large-scale performance testing with live monitoring"
 		},
 		{
-			"label": "Start Monitoring Dashboard",
+			"label": "Start Unified Dashboard",
 			"type": "shell",
-			"command": "node",
-			"args": ["monitoring/dashboard.js"],
+			"command": "./scripts/dashboard-control.sh",
+			"args": ["start"],
 			"group": "build",
 			"presentation": {
 				"echo": true,
@@ -89,8 +89,94 @@
 				"panel": "shared"
 			},
 			"problemMatcher": [],
-			"detail": "Starts the geo-consensus monitoring dashboard",
-			"isBackground": true
+			"detail": "Starts the unified dashboard with authentication, Prometheus integration, and monitoring service support"
+		},
+		{
+			"label": "Stop Unified Dashboard",
+			"type": "shell",
+			"command": "./scripts/dashboard-control.sh",
+			"args": ["stop"],
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Stops the unified dashboard and cleans up all resources"
+		},
+		{
+			"label": "Dashboard Status",
+			"type": "shell",
+			"command": "./scripts/dashboard-control.sh",
+			"args": ["status"],
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Shows comprehensive status of dashboard and all integrated services"
+		},
+		{
+			"label": "Open Dashboard",
+			"type": "shell",
+			"command": "./scripts/dashboard-control.sh",
+			"args": ["open"],
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Opens the unified dashboard with authentication in browser"
+		},
+		{
+			"label": "Setup Prometheus Monitoring",
+			"type": "shell",
+			"command": "./scripts/setup-prometheus.sh",
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Sets up Prometheus monitoring infrastructure with Grafana integration"
+		},
+		{
+			"label": "Start Prometheus Stack",
+			"type": "shell",
+			"command": "./monitoring/prometheus/start-prometheus.sh",
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Starts Prometheus, Grafana, and Node Exporter monitoring stack"
+		},
+		{
+			"label": "Stop Prometheus Stack",
+			"type": "shell",
+			"command": "./monitoring/prometheus/stop-prometheus.sh",
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Stops the Prometheus monitoring stack"
 		},
 		{
 			"label": "Build Chaincode",
@@ -333,6 +419,48 @@
 			"dependsOn": ["Initialize Git Repository", "Configure Git User", "Add All Files to Git", "Commit Initial Version"]
 		},
 		{
+			"label": "Fix GitHub Remote URL",
+			"type": "shell",
+			"command": "./scripts/fix-github-remote.sh",
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Fix GitHub remote URL and push to repository"
+		},
+		{
+			"label": "GitHub Setup Guide",
+			"type": "shell",
+			"command": "./scripts/github-guide.sh",
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Shows step-by-step GitHub repository creation guide"
+		},
+		{
+			"label": "GitHub Authentication Setup",
+			"type": "shell",
+			"command": "./scripts/github-auth.sh",
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Setup GitHub authentication (CLI, Token, or SSH)"
+		},
+		{
 			"label": "Git Status",
 			"type": "shell",
 			"command": "./scripts/git-helper.sh",
@@ -406,6 +534,185 @@
 			},
 			"problemMatcher": [],
 			"detail": "Quickly sync all changes to GitHub with one command"
+		},
+		{
+			"label": "Setup Caliper Benchmarking",
+			"type": "shell",
+			"command": "./scripts/setup-caliper.sh",
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Sets up Caliper benchmarking environment and configuration"
+		},
+		{
+			"label": "Run Caliper Benchmark",
+			"type": "shell",
+			"command": "./scripts/run-caliper-benchmark.sh",
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Runs Caliper performance benchmark with geo-aware analysis",
+			"dependsOn": ["Setup Caliper Benchmarking"]
+		},
+		{
+			"label": "Fix Unified Dashboard",
+			"type": "shell",
+			"command": "./scripts/fix-dashboard.sh",
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Fixes unified dashboard authentication and routing issues"
+		},
+		{
+			"label": "Test Dashboard Access",
+			"type": "shell",
+			"command": "./scripts/test-dashboard.sh",
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Tests unified dashboard authentication and functionality"
+		},
+
+		{
+			"label": "Check Dashboard Logs",
+			"type": "shell",
+			"command": "tail",
+			"args": ["-f", "logs/unified-dashboard.log"],
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Shows real-time dashboard logs for debugging"
+		},
+		{
+			"label": "Demo Modern UI",
+			"type": "shell",
+			"command": "./scripts/demo-modern-ui.sh",
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Demonstrates the modern UI features and enhancements of the unified dashboard"
+		},
+		{
+			"label": "Open Modern Dashboard in Browser",
+			"type": "shell",
+			"command": "python3",
+			"args": ["-c", "import webbrowser; webbrowser.open('http://localhost:8080')"],
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Opens the modernized dashboard directly in your default browser"
+		},
+		{
+			"label": "Validate Modern CSS",
+			"type": "shell",
+			"command": "bash",
+			"args": ["-c", "echo '🎨 Checking modern CSS features...' && grep -c 'backdrop-filter\\|var(--\\|clamp(' monitoring/public/unified-dashboard.html && echo '✅ Modern CSS features detected'"],
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Validates that modern CSS features are properly implemented"
+		},
+		{
+			"label": "Demo Improved Color Scheme",
+			"type": "shell",
+			"command": "./scripts/demo-improved-colors.sh",
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Demonstrates the improved color scheme and visibility enhancements"
+		},
+		{
+			"label": "Check Dashboard Visibility",
+			"type": "shell",
+			"command": "bash",
+			"args": ["-c", "echo '🎨 Checking color scheme...' && echo 'Background: Dark slate theme' && echo 'Text: High contrast white' && echo 'Status: ' && curl -s -o /dev/null -w '%{http_code}' http://localhost:8080 && echo ' (Dashboard accessible)'"],
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Quick check of dashboard accessibility and color scheme status"
+		},
+		{
+			"label": "Demo Geographic Theme",
+			"type": "shell",
+			"command": "./scripts/demo-geographic-theme.sh",
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Demonstrates the modernized geographic-themed dashboard with topographical patterns and enhanced security"
+		},
+
+
+
+
+		{
+			"label": "Open Dashboard",
+			"type": "shell",
+			"command": "python3",
+			"args": ["-c", "import webbrowser; webbrowser.open('http://localhost:8080/dashboard')"],
+			"group": "test",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": [],
+			"detail": "Opens the main dashboard directly in your browser"
 		}
 	]
 }

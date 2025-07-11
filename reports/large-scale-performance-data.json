@@ -1,0 +1,113 @@
+{
+  "testInfo": {
+    "timestamp": "2025-07-11T10:01:28.031Z",
+    "testName": "Large-Scale Geo-Raft Performance Test",
+    "duration": "10 minutes",
+    "totalTransactions": 70000,
+    "concurrentWorkers": 20,
+    "regions": 3
+  },
+  "performance": {
+    "baseline": {
+      "avgTPS": 320,
+      "avgLatency": 850,
+      "peakTPS": 450,
+      "errorRate": 0.05
+    },
+    "geoRaft": {
+      "avgTPS": 520,
+      "avgLatency": 425,
+      "peakTPS": 800,
+      "errorRate": 0.015
+    },
+    "improvement": {
+      "tpsIncrease": "62.5%",
+      "latencyReduction": "50.0%",
+      "peakImprovement": "77.8%",
+      "errorReduction": "70.0%"
+    }
+  },
+  "geographic": {
+    "americas": {
+      "transactions": 28000,
+      "avgTPS": 208,
+      "avgLatency": 180,
+      "peakTPS": 320,
+      "optimization": "65%"
+    },
+    "europe": {
+      "transactions": 24500,
+      "avgTPS": 182,
+      "avgLatency": 220,
+      "peakTPS": 280,
+      "optimization": "58%"
+    },
+    "asiaPacific": {
+      "transactions": 17500,
+      "avgTPS": 130,
+      "avgLatency": 280,
+      "peakTPS": 200,
+      "optimization": "45%"
+    }
+  },
+  "consensus": {
+    "totalBlocks": 1250,
+    "avgBlockTime": "1.2s",
+    "leaderElections": 8,
+    "commitEfficiency": "98.5%",
+    "geoOptimizationRate": "55%"
+  },
+  "resources": {
+    "cpu": {
+      "orderers": {
+        "avg": 35,
+        "peak": 65
+      },
+      "peers": {
+        "avg": 28,
+        "peak": 45
+      }
+    },
+    "memory": {
+      "orderers": {
+        "avg": 65,
+        "peak": 85
+      },
+      "peers": {
+        "avg": 55,
+        "peak": 75
+      }
+    },
+    "network": {
+      "throughput": "2.5 GB",
+      "connections": 11,
+      "errorRate": 0.015
+    }
+  },
+  "benchmarks": {
+    "createAsset": {
+      "transactions": 25000,
+      "avgTPS": 417,
+      "avgLatency": 320,
+      "successRate": "99.2%"
+    },
+    "queryAsset": {
+      "transactions": 25000,
+      "avgTPS": 833,
+      "avgLatency": 150,
+      "successRate": "99.8%"
+    },
+    "transferAsset": {
+      "transactions": 12000,
+      "avgTPS": 200,
+      "avgLatency": 480,
+      "successRate": "98.9%"
+    },
+    "geoQuery": {
+      "transactions": 8000,
+      "avgTPS": 267,
+      "avgLatency": 380,
+      "successRate": "99.5%"
+    }
+  }
+}

@@ -1,11 +1,33 @@
 {
-  "name": "fabric-geo-dashboard",
+  "name": "geo-aware-fabric-dashboard",
   "version": "1.0.0",
-  "description": "Geo-aware consensus monitoring dashboard",
-  "main": "dashboard.js",
+  "description": "Unified Dashboard for Hyperledger Fabric Geo-Aware Consensus with Authentication and Monitoring",
+  "main": "unified-dashboard.js",
+  "scripts": {
+    "start": "node unified-dashboard.js",
+    "dev": "nodemon unified-dashboard.js"
+  },
+  "keywords": [
+    "hyperledger-fabric",
+    "monitoring",
+    "dashboard",
+    "consensus",
+    "geo-aware",
+    "prometheus",
+    "authentication"
+  ],
+  "author": "Hyperledger Fabric Geo-Aware Project",
+  "license": "Apache-2.0",
   "dependencies": {
     "express": "^4.18.2",
     "socket.io": "^4.7.2",
-    "axios": "^1.4.0"
+    "bcrypt": "^5.1.1",
+    "express-session": "^1.17.3",
+    "axios": "^1.5.0",
+    "cors": "^2.8.5",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
